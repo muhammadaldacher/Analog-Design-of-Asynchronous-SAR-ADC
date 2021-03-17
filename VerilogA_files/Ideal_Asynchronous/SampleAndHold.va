@@ -1,0 +1,29 @@
+// VerilogA for SampleAndHold
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_SampleAndHold(clk,vin,vmin,vout);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;		//vdd is 1v
+
+input clk,vin,vmin;
+output vout;
+
+electrical vout,vin,vmin,clk;
+
+real v;
+
+analog begin
+
+	// Sampling Phase (+1 is for rising edge, -1 is for falling edge)
+	@(cross(V(clk) - clk_threshold, +1))
+		v = V(vin);
+
+	V(vout) <+ transition(v,delay,ttime);
+end
+
+endmodule

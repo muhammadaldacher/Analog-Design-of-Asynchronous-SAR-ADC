@@ -1,0 +1,32 @@
+// VerilogA for SAR_VerilogA_Asynchronous, VerilogA_1ns_delaycell, veriloga
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_1ns_delaycell(inp,outp,vdd,vss);
+
+parameter real vtrans=0.5;
+parameter real delay = 1n;
+parameter real ttime = 1f;
+
+inout vdd,vss;
+input inp;
+output outp;
+
+electrical inp,outp,vdd,vss;
+real d_out;
+
+analog begin
+    @(cross(V(inp) - vtrans, +1)) 
+    begin
+        d_out = 1;
+    end
+
+    @(cross(V(inp) - vtrans, -1)) 
+    begin
+        d_out = 0;
+    end
+
+	V(outp) <+ transition(d_out,delay,ttime);
+end
+
+endmodule

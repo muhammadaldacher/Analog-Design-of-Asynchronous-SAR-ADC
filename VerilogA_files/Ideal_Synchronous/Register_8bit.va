@@ -1,0 +1,41 @@
+// VerilogA for SAR_VerilogA, VerilogA_Register_8bit, veriloga
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_Register_8bit(clk,in0,in1,in2,in3,in4,in5,in6,in7,out0,out1,out2,out3,out4,out5,out6,out7,vdd,vss);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+
+inout vdd,vss;
+input clk,in0,in1,in2,in3,in4,in5,in6,in7;
+output out0,out1,out2,out3,out4,out5,out6,out7;
+
+electrical clk,in0,in1,in2,in3,in4,in5,in6,in7,out0,out1,out2,out3,out4,out5,out6,out7,vdd,vss;
+real d_0,d_1,d_2,d_3,d_4,d_5,d_6,d_7;
+
+analog begin
+	@(cross(V(clk) - clk_threshold, +1)) 
+	begin
+		d_7 = V(in7);
+		d_6 = V(in6);
+		d_5 = V(in5);
+		d_4 = V(in4);
+		d_3 = V(in3);
+		d_2 = V(in2);
+		d_1 = V(in1);
+		d_0 = V(in0);
+	end
+
+	V(out7) <+ transition(d_7,delay,ttime);
+    	V(out6) <+ transition(d_6,delay,ttime);
+    	V(out5) <+ transition(d_5,delay,ttime);
+    	V(out4) <+ transition(d_4,delay,ttime);
+    	V(out3) <+ transition(d_3,delay,ttime);
+    	V(out2) <+ transition(d_2,delay,ttime);
+    	V(out1) <+ transition(d_1,delay,ttime);
+    	V(out0) <+ transition(d_0,delay,ttime);
+end
+endmodule

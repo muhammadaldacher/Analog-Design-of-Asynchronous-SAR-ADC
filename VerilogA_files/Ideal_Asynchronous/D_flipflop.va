@@ -1,0 +1,47 @@
+// VerilogA for SAR_VerilogA, VerilogA_D_FlipFlop, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_DFlipFlop(D,clk,Q,Qb,set,reset,vdd,vss);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+
+inout vdd,vss;
+input D,clk,set,reset;
+output Q,Qb;
+
+electrical D,clk,Q,Qb,set,reset,vdd,vss;
+
+real d_0,d_0b;
+ 
+analog begin
+	
+    @(cross(V(set) - vtrans, +1)) begin
+        d_0 = 1; 
+        d_0b = 0; end
+        
+    @(cross(V(reset) - vtrans, +1)) begin
+        d_0 = 0;
+        d_0b = 1; end
+
+    @(cross(V(clk) - clk_threshold, +1)) 
+    begin
+        //if((V(set) < vtrans) && (V(reset) < vtrans) ) begin
+            if(V(D) > vtrans) begin
+            d_0 = 1; d_0b = 0; end
+            
+            else begin
+            d_0 = 0; d_0b = 1; end
+        //end
+    end
+    
+
+    V(Q) <+ transition(d_0,delay,ttime);
+    V(Qb) <+ transition(d_0b,delay,ttime);
+end
+
+endmodule

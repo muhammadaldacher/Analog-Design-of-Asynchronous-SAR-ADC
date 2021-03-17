@@ -1,0 +1,42 @@
+// VerilogA for ClockedComparator
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_ClockedComparator(out,out_b,vref,vin,clk);
+
+parameter real clk_th=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+
+input vin,vref,clk;
+output out,out_b;
+
+electrical out,out_b,vref,vin,clk;
+real d_result, d_result_b;
+
+analog begin
+
+	@(cross(V(clk) - clk_th, +1)) begin
+		if(V(vin) > V(vref)) begin
+			d_result = 1;
+			d_result_b = 0;
+		end
+		else begin
+			d_result = 0;
+			d_result_b = 1;
+		end
+	end
+	
+
+	@(cross(V(clk) - clk_th, -1)) begin
+			d_result = 0;
+			d_result_b = 0;
+	end	
+
+	V(out) <+ transition(d_result,delay,ttime);	
+	V(out_b) <+ transition(d_result_b,delay,ttime);	
+end
+
+endmodule
+

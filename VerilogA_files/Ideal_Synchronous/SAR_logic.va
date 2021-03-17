@@ -1,0 +1,112 @@
+// VerilogA for SAR_VerilogA, VerilogA_SAR_logic_Synchronous, veriloga
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_SAR_logic_Synchronous(in_comp,clk,d0,d1,d2,d3,d4,d5,d6,d7,regclk,sampleclk,vdd,vss);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+// 8-bits (8-cycles) + 1-cycle for sampling + 1-cycle for Register output = 10-cycles
+
+inout vdd,vss;
+input in_comp, clk;
+output d0,d1,d2,d3,d4,d5,d6,d7;
+output sampleclk,regclk;
+
+electrical in_comp,clk,d0,d1,d2,d3,d4,d5,d6,d7,regclk,sampleclk,vdd,vss;
+
+real d_0,d_1,d_2,d_3,d_4,d_5,d_6,d_7,sample_en,sar_counter,reg_out;
+        
+analog begin
+
+    // Initial State
+    @(initial_step) begin
+            sample_en = 1;
+            d_7 = 0;
+            d_6 = 0;
+            d_5 = 0;
+            d_4 = 0;
+            d_3 = 0;
+            d_2 = 0;
+            d_1 = 0;
+            d_0 = 0;
+            sar_counter = 9; //10-bit counter
+    end
+
+    // Operation
+
+    // Comparison  
+    // At Rising Edge of clk, the bits are updated for comparison.
+    // At Falling Edge of clk, the Comparator produces the new bit (Regeneration)
+	@(cross(V(clk) - clk_threshold, +1)) 
+	begin
+        if(sar_counter == 9) begin
+            sample_en = 1; //1st count is for sampling
+            reg_out = 0;
+	    d_7 = 0; d_6 = 0; d_5 = 0; d_4 = 0; d_3 = 0; d_2 = 0; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+        
+        else if(sar_counter == 8) begin
+            d_7 = 1; d_6 = 0; d_5 = 0; d_4 = 0; d_3 = 0; d_2 = 0; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 7) begin
+            d_7 = V(in_comp); d_6 = 1; d_5 = 0; d_4 = 0; d_3 = 0; d_2 = 0; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 6) begin
+            d_6 = V(in_comp); d_5 = 1; d_4 = 0; d_3 = 0; d_2 = 0; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 5) begin
+            d_5 = V(in_comp); d_4 = 1; d_3 = 0; d_2 = 0; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 4) begin
+            d_4 = V(in_comp); d_3 = 1; d_2 = 0; d_1 = 0; d_0 = 0;    
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 3) begin
+            d_3 = V(in_comp); d_2 = 1; d_1 = 0; d_0 = 0;
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 2) begin
+            d_2 = V(in_comp); d_1 = 1; d_0 = 0; 
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 1) begin
+            d_1 = V(in_comp); d_0 = 1; 
+            sar_counter = sar_counter - 1; end
+            
+        else if(sar_counter == 0) begin
+            d_0 = V(in_comp); 
+            sar_counter = 9; end
+    end 
+
+    // Producing the neg edge of the pulse to sample & to get the output of the register    
+	@(cross(V(clk) - clk_threshold, -1)) 
+	begin
+        if(sample_en == 1) begin
+            sample_en = 0; end
+        
+        if(sar_counter == 9) begin
+            reg_out = 1; end
+    end    
+    
+    V(d7) <+ transition(d_7,delay,ttime);
+    V(d6) <+ transition(d_6,delay,ttime);
+    V(d5) <+ transition(d_5,delay,ttime);
+    V(d4) <+ transition(d_4,delay,ttime);
+    V(d3) <+ transition(d_3,delay,ttime);
+    V(d2) <+ transition(d_2,delay,ttime);
+    V(d1) <+ transition(d_1,delay,ttime);
+    V(d0) <+ transition(d_0,delay,ttime);
+    V(regclk) <+ transition(reg_out,delay,ttime);
+    V(sampleclk) <+ transition(sample_en,delay,ttime);
+    
+end
+
+endmodule
+

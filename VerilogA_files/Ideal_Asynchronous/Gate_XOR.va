@@ -1,0 +1,32 @@
+// VerilogA for SAR_VerilogA, VerilogA_XOR, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_(A,B,X);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+
+input A,B;
+output X;
+
+electrical A,B,X;
+
+real X_out;
+ 
+analog begin
+	
+	if(V(A) == V(B)) begin
+            X_out = 0; end
+            
+        else begin
+            X_out = 1; end
+    
+
+    V(X) <+ transition(X_out,delay,ttime);
+end
+
+endmodule

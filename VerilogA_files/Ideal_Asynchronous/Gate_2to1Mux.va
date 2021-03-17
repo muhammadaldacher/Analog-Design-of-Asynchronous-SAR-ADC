@@ -1,0 +1,30 @@
+// VerilogA for SAR_VerilogA_Asynchronous, VerilogA_2to1Mux, veriloga
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_2to1Mux(in0,in1,select,out,vdd,vss);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+
+inout vdd,vss;
+input in0,in1;
+output out;
+
+electrical in0,in1,select,out,vdd,vss;
+
+real result;
+
+analog begin
+
+	if(V(select) < vtrans) begin
+		result = V(in0); end
+	else begin
+		result = V(in1); end
+
+	V(out) <+ transition(result,delay,ttime);
+
+end
+endmodule

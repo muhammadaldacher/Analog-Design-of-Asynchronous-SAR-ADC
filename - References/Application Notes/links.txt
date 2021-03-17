@@ -1,0 +1,7 @@
+https://www.allaboutcircuits.com/technical-articles/understanding-analog-to-digital-converters-the-successive-approximation-reg/
+
+https://www.analog.com/media/en/training-seminars/tutorials/MT-021.pdf
+
+https://www.maximintegrated.com/en/design/technical-documents/tutorials/1/1080.html
+
+http://www.ti.com.cn/cn/lit/an/slyt176/slyt176.pdf

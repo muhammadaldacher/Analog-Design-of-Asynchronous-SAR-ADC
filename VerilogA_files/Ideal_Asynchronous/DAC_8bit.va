@@ -1,0 +1,37 @@
+// VerilogA for VerilogA_DAC_8bit
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_DAC_8bit(d0,d1,d2,d3,d4,d5,d6,d7,vout,vdd,vss,vmin,vmax);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+
+inout vdd,vss;
+input d0,d1,d2,d3,d4,d5,d6,d7;
+input vmin, vmax;
+output vout;
+
+electrical vout,vdd,vss,d0,d1,d2,d3,d4,d5,d6,d7,vmin,vmax;
+
+real result,d_0,d_1,d_2,d_3,d_4,d_5,d_6,d_7;
+
+analog begin
+        d_7 = V(d7)*128;
+        d_6 = V(d6)*64;
+        d_5 = V(d5)*32;
+        d_4 = V(d4)*16;
+        d_3 = V(d3)*8;
+        d_2 = V(d2)*4;
+        d_1 = V(d1)*2;
+        d_0 = V(d0)*1;
+
+        result = ((d_7+d_6+d_5+d_4+d_3+d_2+d_1+d_0) * ((V(vmax)-V(vmin))/(256))) + V(vmin) ;
+
+        V(vout) <+ transition(result,delay,ttime);
+end
+
+
+endmodule

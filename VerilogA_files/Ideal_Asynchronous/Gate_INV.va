@@ -1,0 +1,32 @@
+// VerilogA for SAR_VerilogA_Asynchronous, VerilogA_inv, veriloga
+
+`include "constants.vams"
+`include "disciplines.vams"
+
+module VerilogA_inv(A,X);
+
+parameter real vtrans=0.5;
+parameter real delay = 0;
+parameter real ttime = 1p;
+parameter real clk_threshold = 0.5;
+
+input A;
+output X;
+
+electrical A,X;
+
+real X_out;
+ 
+analog begin
+	
+	if(V(A) > vtrans) begin
+            X_out = 0; end
+            
+        else begin
+            X_out = 1; end
+    
+
+    V(X) <+ transition(X_out,delay,ttime);
+end
+
+endmodule
