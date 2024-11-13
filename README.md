@@ -58,13 +58,9 @@ The SAR logic generates the digital code for the DAC in each comparison stage. A
 [4] M. Dessouky and A. Kaiser, "Very low-voltage digital-audio Δ∑ modulator with 88-dB dynamic range using local switch bootstrapping," IEEE Journal of Solid-State Circuits, vol. 36, no. 3, pp. 349-355, March 2001.<br/>
 
 *****************
-For more info, check the project's report & ppt: <br/>
-https://github.com/muhammadaldacher/Analog-Design-of-Asynchronous-SAR-ADC/blob/main/%5BReport%5D%20Design%20of%20a%20Low-Power%20Asynchronous%20SAR%20ADC%20in%2045%20nm%20CMOS%20Technology.pdf <br/>
+For more info, check the project's report & ppt: ([Report](https://github.com/muhammadaldacher/Analog-Design-of-Asynchronous-SAR-ADC/blob/main/%5BReport%5D%20Design%20of%20a%20Low-Power%20Asynchronous%20SAR%20ADC%20in%2045%20nm%20CMOS%20Technology.pdf)) ([PPT](https://github.com/muhammadaldacher/Analog-Design-of-Asynchronous-SAR-ADC/blob/main/%5BPPT%5D%20Design%20of%20a%20Low-Power%20Asynchronous%20SAR%20ADC%20in%2045%20nm%20CMOS%20Technology.pdf))<br/>
 
-https://github.com/muhammadaldacher/Analog-Design-of-Asynchronous-SAR-ADC/blob/main/%5BPPT%5D%20Design%20of%20a%20Low-Power%20Asynchronous%20SAR%20ADC%20in%2045%20nm%20CMOS%20Technology.pdf <br/>
-
-My project on google drive:<br/>
-https://drive.google.com/drive/folders/1zEzuneabBBtgcV0V-nYb4Kvp_cLarDpZ?usp=sharing <br/>
+My project on google drive: ([Drive](https://drive.google.com/drive/folders/1zEzuneabBBtgcV0V-nYb4Kvp_cLarDpZ?usp=sharing)) <br/>
 
 
 
